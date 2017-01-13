@@ -169,22 +169,27 @@ var rentalModifications = [{
  //Exercice 1
 function Price(rentals,cars)
 {
-  for (var i = 0; i< rentals.lengt; i++) 
+  for (var i = 0; i< rentals.length; i++) 
   {
-    for (var j; j<cars.length;j++)
+    for (var j = 0; j<cars.length; j++)
     {
       if (rentals[i].carId==cars[j].carId)
       {
         PricePerKm=cars[j].pricePerKm;
         PricePerDay=cars[j].pricePerDay;
-        rentals[i].price=((new Date(rentals[i].returnDate)- new Date(rentals[i].pickupDate))*PricePerDay)+(PricePerKm*rentals[i].distance);
+        var lastDate = new Date(rentals[i].returnDate);
+        var firstDate= new Date(rentals[i].pickupDate);
+        var returnDate=lastDate.getDate();
+        var pickupDate=firstDate.getDate()-1;
+        rentals[i].price=((returnDate-pickupDate)*PricePerDay)+(PricePerKm*rentals[i].distance);
       }
     }
   }
 }
 
+Price(rentals,cars);
 console.log(cars);
 console.log(rentals);
 console.log(actors);
 console.log(rentalModifications);
-Price(rentals,cars);
+
