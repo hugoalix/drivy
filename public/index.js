@@ -166,28 +166,50 @@ var rentalModifications = [{
 }];
  
 
- //Exercice 1
-function Price(rentals,cars)
+//Exercice 1
+function Price()
 {
-  for (var i = 0; i< rentals.length; i++) 
+  rentals.forEach(function(entreR)
   {
-    for (var j = 0; j<cars.length; j++)
+    const rentTime = (new Date(entreR.returnDate.replace(/-/g,'/'))-new Date(entreR.pickupDate.replace(/-/g,'/')))/(1000*60*60*24)+1;
+    cars.forEach(function(entreC)
     {
-      if (rentals[i].carId==cars[j].carId)
+      if (entreC.id==entreR.carId) 
       {
-        PricePerKm=cars[j].pricePerKm;
-        PricePerDay=cars[j].pricePerDay;
-        var lastDate = new Date(rentals[i].returnDate);
-        var firstDate= new Date(rentals[i].pickupDate);
-        var returnDate=lastDate.getDate();
-        var pickupDate=firstDate.getDate()-1;
-        rentals[i].price=((returnDate-pickupDate)*PricePerDay)+(PricePerKm*rentals[i].distance);
+        if (rentTime>1 && rentTime<4) 
+        {
+          entreR.price=(0.90*entreC.pricePerDay)*rentTime+entreC.pricePerKm*entreR.distance;
+        }
+        else if (rentTime>4 && rentTime<10) 
+        {
+          entreR.price=(0.70*entreC.pricePerDay)*rentTime+entreC.pricePerKm*entreR.distance;
+        }
+        else if (rentTime>10)
+         {
+          entreR.price=(0.50*entreC.pricePerDay)*rentTime+entreC.pricePerKm*entreR.distance;
+         }
+         else
+          { entreR.price=entreC.pricePerDay*rentTime+entreC.pricePerKm*entreR.distance;}
       }
-    }
-  }
+    });
+  });
 }
 
-Price(rentals,cars);
+function Commission()
+{
+ rentals.forEach(function(entreRentals)
+ {
+  const rentTime = (new Date(entreRentals.returnDate.replace(/-/g,'/'))-new Date(entreRentals.pickupDate.replace(/-/g,'/')))/(1000*60*60*24)+1;
+  const commission=0.30*entreRentals.price;
+  entreRentals.insurance=0.5*commission;
+  entreRentals.assistance=1*rentTime;
+  entreRentals.drivy=commission-entreRentals.insurance-entreRentals.assistance;
+ })
+}
+
+
+Price();
+Commission();
 console.log(cars);
 console.log(rentals);
 console.log(actors);
