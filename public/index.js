@@ -214,10 +214,8 @@ function Deductible()
     const rentTime = (new Date(entreR.returnDate.replace(/-/g,'/'))-new Date(entreR.pickupDate.replace(/-/g,'/')))/(1000*60*60*24)+1;
     if (entreR.deductibleReduction)
      {
-      entreR.price=entreR.price+150+(rentTime*4);
+      entreR.price=entreR.price+(rentTime*4);
      }
-     else
-      {entreR.price=entreR.price+800;}
   });
 }
 
